@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- TOP BAR: Theme toggle + Layout presets -->
+  <div class="top-bar">
+    <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
+    <div class="preset-bar">
+      <button class="preset-btn active" data-preset="classic"  onclick="switchPreset('classic')">Classic</button>
+      <button class="preset-btn"        data-preset="opsleft"  onclick="switchPreset('opsleft')">Ops Left</button>
+      <button class="preset-btn"        data-preset="compact"  onclick="switchPreset('compact')">Compact</button>
+      <button class="preset-btn"        data-preset="centered" onclick="switchPreset('centered')">Centered</button>
+    </div>
+  </div>
+
+  <div class="calculator">
+
+    <!-- MODE TABS -->
+    <div class="mode-tabs">
+      <button class="tab active" id="tab-standard"   onclick="switchMode('standard')">Standard</button>
+      <button class="tab"        id="tab-scientific"  onclick="switchMode('scientific')">Scientific</button>
+      <button class="tab"        id="tab-converter"   onclick="switchMode('converter')">Converter</button>
+    </div>
+
+    <!-- DISPLAY -->
+    <div class="display-area" id="display-area">
+      <button class="hist-toggle" id="hist-toggle-btn" onclick="toggleHistory()" title="History">🕐</button>
+      <div class="expression" id="expression"></div>
+      <div class="display"    id="display">0</div>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <div class="hist-panel hidden" id="hist-panel">
+      <div class="hist-header">
+        <span>History</span>
+        <button class="hist-clear-btn" onclick="clearHistory()">🗑 Clear All</button>
+      </div>
+      <div class="hist-list" id="hist-list">
+        <div class="hist-empty">No calculations yet</div>
+      </div>
+    </div>
+
+    <!-- ===== STANDARD MODE — grid built by JS preset ===== -->
+    <div id="mode-standard">
+      <div class="btn-grid" id="standard-grid">
+        <!-- Buttons injected by switchPreset() in script.js -->
+      </div>
+    </div>
+
+    <!-- ===== SCIENTIFIC MODE ===== -->
+    <div id="mode-scientific" class="hidden">
+      <div class="btn-grid">
+        <button class="btn btn-sci" onclick="sciFunc('sin',this)">sin</button>
+        <button class="btn btn-sci" onclick="sciFunc('cos',this)">cos</button>
+        <button class="btn btn-sci" onclick="sciFunc('tan',this)">tan</button>
+        <button class="btn btn-sci" onclick="sciFunc('log',this)">log</button>
+        <button class="btn btn-sci" onclick="sciFunc('ln',this)">ln</button>
+        <button class="btn btn-sci" onclick="sciFunc('sqrt',this)">√</button>
+        <button class="btn btn-sci" onclick="sciFunc('sq',this)">x²</button>
+        <button class="btn btn-sci" onclick="sciFunc('cube',this)">x³</button>
+        <button class="btn btn-sci" onclick="sciFunc('inv',this)">1/x</button>
+        <button class="btn btn-sci" onclick="appendSpecial('Math.PI',this)">π</button>
+        <button class="btn btn-sci" onclick="appendSpecial('Math.E',this)">e</button>
+        <button class="btn btn-sci" onclick="appendOp('^',this)">xʸ</button>
+        <button class="btn btn-clear" id="kAC"   onclick="clearDisplay(this)">C</button>
+        <button class="btn btn-func"  id="kBACK" onclick="backspace(this)">⌫</button>
+        <button class="btn btn-func"  id="kPCT"  onclick="percentage(this)">%</button>
+        <button class="btn btn-op"    id="kDIV"  onclick="appendOp('/',this)">÷</button>
+        <button class="btn btn-num"  id="k7"    onclick="appendNum('7',this)">7</button>
+        <button class="btn btn-num"  id="k8"    onclick="appendNum('8',this)">8</button>
+        <button class="btn btn-num"  id="k9"    onclick="appendNum('9',this)">9</button>
+        <button class="btn btn-op"   id="kMUL"  onclick="appendOp('*',this)">×</button>
+        <button class="btn btn-num"  id="k4"    onclick="appendNum('4',this)">4</button>
+        <button class="btn btn-num"  id="k5"    onclick="appendNum('5',this)">5</button>
+        <button class="btn btn-num"  id="k6"    onclick="appendNum('6',this)">6</button>
+        <button class="btn btn-op"   id="kSUB"  onclick="appendOp('-',this)">−</button>
+        <button class="btn btn-num"  id="k1"    onclick="appendNum('1',this)">1</button>
+        <button class="btn btn-num"  id="k2"    onclick="appendNum('2',this)">2</button>
+        <button class="btn btn-num"  id="k3"    onclick="appendNum('3',this)">3</button>
+        <button class="btn btn-op"   id="kADD"  onclick="appendOp('+',this)">+</button>
+        <button class="btn btn-func" id="kLPAR" onclick="appendSpecial('(',this)">()</button>
+        <button class="btn btn-num"  id="k0"    onclick="appendNum('0',this)">0</button>
+        <button class="btn btn-func" id="kDOT"  onclick="appendDot(this)">.</button>
+        <button class="btn btn-eq"   id="kEQ"   onclick="calculate(this)">=</button>
+      </div>
+    </div>
+
+    <!-- ===== CONVERTER MODE ===== -->
+    <div id="mode-converter" class="hidden">
+      <div class="converter">
+
+        <div class="conv-tabs">
+          <button class="conv-tab active" id="ctab-currency" onclick="switchConv('currency')">💱 Currency</button>
+          <button class="conv-tab"        id="ctab-length"   onclick="switchConv('length')">📏 Length</button>
+          <button class="conv-tab"        id="ctab-area"     onclick="switchConv('area')">⬛ Area</button>
+          <button class="conv-tab"        id="ctab-mass"     onclick="switchConv('mass')">⚖️ Mass</button>
+          <button class="conv-tab"        id="ctab-temp"     onclick="switchConv('temp')">🌡️ Temp</button>
+          <button class="conv-tab"        id="ctab-volume"   onclick="switchConv('volume')">🧪 Volume</button>
+          <button class="conv-tab"        id="ctab-data"     onclick="switchConv('data')">💾 Data</button>
+          <button class="conv-tab"        id="ctab-speed"    onclick="switchConv('speed')">🚀 Speed</button>
+          <button class="conv-tab"        id="ctab-time"     onclick="switchConv('time')">⏱️ Time</button>
+          <button class="conv-tab"        id="ctab-tip"      onclick="switchConv('tip')">💰 Tip</button>
+          <button class="conv-tab"        id="ctab-gst"      onclick="switchConv('gst')">🧾 GST</button>
+        </div>
+
+        <!-- CURRENCY -->
+        <div class="conv-section" id="conv-currency">
+          <h3>Currency Converter</h3>
+          <div class="conv-amount-row">
+            <input type="number" id="curr-input" placeholder="Enter amount" oninput="convertCurrency()" />
+          </div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select base currency</div>
+            <label class="unit-item"><input type="radio" name="curr-from" value="INR" checked onchange="convertCurrency()" /><span>₹ Indian Rupee (INR)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="USD" onchange="convertCurrency()" /><span>$ US Dollar (USD)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="EUR" onchange="convertCurrency()" /><span>€ Euro (EUR)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="GBP" onchange="convertCurrency()" /><span>£ British Pound (GBP)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="JPY" onchange="convertCurrency()" /><span>¥ Japanese Yen (JPY)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="AED" onchange="convertCurrency()" /><span>AED Dirham</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="CAD" onchange="convertCurrency()" /><span>CA$ Canadian Dollar</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="AUD" onchange="convertCurrency()" /><span>A$ Australian Dollar</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="CNY" onchange="convertCurrency()" /><span>¥ Chinese Yuan (CNY)</span></label>
+            <label class="unit-item"><input type="radio" name="curr-from" value="SGD" onchange="convertCurrency()" /><span>SGD Singapore Dollar</span></label>
+          </div>
+          <div class="conv-result-box" id="curr-result">Select currency and enter amount</div>
+          <div class="conv-note">* Approximate rates — for reference only</div>
+        </div>
+
+        <!-- LENGTH -->
+        <div class="conv-section hidden" id="conv-length">
+          <h3>Length Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="len-input" placeholder="Enter value" oninput="convertLength()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="len-from" value="m"    checked onchange="convertLength()" /><span>Metre (m)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="km"   onchange="convertLength()" /><span>Kilometre (km)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="cm"   onchange="convertLength()" /><span>Centimetre (cm)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="mm"   onchange="convertLength()" /><span>Millimetre (mm)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="mile" onchange="convertLength()" /><span>Mile</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="ft"   onchange="convertLength()" /><span>Foot (ft)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="inch" onchange="convertLength()" /><span>Inch (in)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="yard" onchange="convertLength()" /><span>Yard (yd)</span></label>
+            <label class="unit-item"><input type="radio" name="len-from" value="nm"   onchange="convertLength()" /><span>Nanometre (nm)</span></label>
+          </div>
+          <div class="conv-result-box" id="len-result">Enter a value to convert</div>
+        </div>
+
+        <!-- AREA -->
+        <div class="conv-section hidden" id="conv-area">
+          <h3>Area Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="area-input" placeholder="Enter value" oninput="convertArea()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqm"     checked onchange="convertArea()" /><span>Square Metre (m²)</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqkm"    onchange="convertArea()" /><span>Square Kilometre (km²)</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqft"    onchange="convertArea()" /><span>Square Foot (ft²)</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqcm"    onchange="convertArea()" /><span>Square Centimetre (cm²)</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="acre"    onchange="convertArea()" /><span>Acre</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="hectare" onchange="convertArea()" /><span>Hectare</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqyard"  onchange="convertArea()" /><span>Square Yard</span></label>
+            <label class="unit-item"><input type="radio" name="area-from" value="sqmile"  onchange="convertArea()" /><span>Square Mile</span></label>
+          </div>
+          <div class="conv-result-box" id="area-result">Enter a value to convert</div>
+        </div>
+
+        <!-- MASS -->
+        <div class="conv-section hidden" id="conv-mass">
+          <h3>Mass Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="mass-input" placeholder="Enter value" oninput="convertMass()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="mass-from" value="kg"      checked onchange="convertMass()" /><span>Kilogram (kg)</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="g"       onchange="convertMass()" /><span>Gram (g)</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="mg"      onchange="convertMass()" /><span>Milligram (mg)</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="lb"      onchange="convertMass()" /><span>Pound (lb)</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="oz"      onchange="convertMass()" /><span>Ounce (oz)</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="ton"     onchange="convertMass()" /><span>Metric Tonne</span></label>
+            <label class="unit-item"><input type="radio" name="mass-from" value="quintal" onchange="convertMass()" /><span>Quintal</span></label>
+          </div>
+          <div class="conv-result-box" id="mass-result">Enter a value to convert</div>
+        </div>
+
+        <!-- TEMPERATURE -->
+        <div class="conv-section hidden" id="conv-temp">
+          <h3>Temperature Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="temp-input" placeholder="Enter value" oninput="convertTemp()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="temp-from" value="C" checked onchange="convertTemp()" /><span>Celsius (°C)</span></label>
+            <label class="unit-item"><input type="radio" name="temp-from" value="F"         onchange="convertTemp()" /><span>Fahrenheit (°F)</span></label>
+            <label class="unit-item"><input type="radio" name="temp-from" value="K"         onchange="convertTemp()" /><span>Kelvin (K)</span></label>
+          </div>
+          <div class="conv-result-box" id="temp-result">Enter a value to convert</div>
+        </div>
+
+        <!-- VOLUME -->
+        <div class="conv-section hidden" id="conv-volume">
+          <h3>Volume Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="vol-input" placeholder="Enter value" oninput="convertVolume()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="vol-from" value="L"    checked onchange="convertVolume()" /><span>Litre (L)</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="mL"   onchange="convertVolume()" /><span>Millilitre (mL)</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="m3"   onchange="convertVolume()" /><span>Cubic Metre (m³)</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="cm3"  onchange="convertVolume()" /><span>Cubic Centimetre (cm³)</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="gal"  onchange="convertVolume()" /><span>Gallon (US)</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="qt"   onchange="convertVolume()" /><span>Quart</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="pt"   onchange="convertVolume()" /><span>Pint</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="floz" onchange="convertVolume()" /><span>Fluid Ounce</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="cup"  onchange="convertVolume()" /><span>Cup</span></label>
+            <label class="unit-item"><input type="radio" name="vol-from" value="tbsp" onchange="convertVolume()" /><span>Tablespoon</span></label>
+          </div>
+          <div class="conv-result-box" id="vol-result">Enter a value to convert</div>
+        </div>
+
+        <!-- DATA -->
+        <div class="conv-section hidden" id="conv-data">
+          <h3>Data Storage Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="data-input" placeholder="Enter value" oninput="convertData()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="data-from" value="B"    checked onchange="convertData()" /><span>Byte (B)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="KB"   onchange="convertData()" /><span>Kilobyte (KB)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="MB"   onchange="convertData()" /><span>Megabyte (MB)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="GB"   onchange="convertData()" /><span>Gigabyte (GB)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="TB"   onchange="convertData()" /><span>Terabyte (TB)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="PB"   onchange="convertData()" /><span>Petabyte (PB)</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="bit"  onchange="convertData()" /><span>Bit</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="Kbit" onchange="convertData()" /><span>Kilobit</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="Mbit" onchange="convertData()" /><span>Megabit</span></label>
+            <label class="unit-item"><input type="radio" name="data-from" value="Gbit" onchange="convertData()" /><span>Gigabit</span></label>
+          </div>
+          <div class="conv-result-box" id="data-result">Enter a value to convert</div>
+        </div>
+
+        <!-- SPEED -->
+        <div class="conv-section hidden" id="conv-speed">
+          <h3>Speed Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="spd-input" placeholder="Enter value" oninput="convertSpeed()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="spd-from" value="ms"   checked onchange="convertSpeed()" /><span>Metre/sec (m/s)</span></label>
+            <label class="unit-item"><input type="radio" name="spd-from" value="kmh"  onchange="convertSpeed()" /><span>Kilometre/hr (km/h)</span></label>
+            <label class="unit-item"><input type="radio" name="spd-from" value="mph"  onchange="convertSpeed()" /><span>Miles/hr (mph)</span></label>
+            <label class="unit-item"><input type="radio" name="spd-from" value="knot" onchange="convertSpeed()" /><span>Knot</span></label>
+            <label class="unit-item"><input type="radio" name="spd-from" value="mach" onchange="convertSpeed()" /><span>Mach</span></label>
+            <label class="unit-item"><input type="radio" name="spd-from" value="fts"  onchange="convertSpeed()" /><span>Foot/sec (ft/s)</span></label>
+          </div>
+          <div class="conv-result-box" id="spd-result">Enter a value to convert</div>
+        </div>
+
+        <!-- TIME -->
+        <div class="conv-section hidden" id="conv-time">
+          <h3>Time Converter</h3>
+          <div class="conv-amount-row"><input type="number" id="time-input" placeholder="Enter value" oninput="convertTime()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">Select unit</div>
+            <label class="unit-item"><input type="radio" name="time-from" value="s"     checked onchange="convertTime()" /><span>Second</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="ms"    onchange="convertTime()" /><span>Millisecond</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="min"   onchange="convertTime()" /><span>Minute</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="hr"    onchange="convertTime()" /><span>Hour</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="day"   onchange="convertTime()" /><span>Day</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="week"  onchange="convertTime()" /><span>Week</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="month" onchange="convertTime()" /><span>Month</span></label>
+            <label class="unit-item"><input type="radio" name="time-from" value="year"  onchange="convertTime()" /><span>Year</span></label>
+          </div>
+          <div class="conv-result-box" id="time-result">Enter a value to convert</div>
+        </div>
+
+        <!-- TIP -->
+        <div class="conv-section hidden" id="conv-tip">
+          <h3>Tip Calculator</h3>
+          <div class="conv-amount-row"><input type="number" id="tip-bill"   placeholder="Bill amount (₹)"      oninput="calcTip()" /></div>
+          <div class="conv-amount-row"><input type="number" id="tip-pct"    placeholder="Tip % (e.g. 10)"       oninput="calcTip()" /></div>
+          <div class="conv-amount-row"><input type="number" id="tip-people" placeholder="Split among (people)" value="1" oninput="calcTip()" /></div>
+          <div class="tip-result" id="tip-result">Enter bill and tip % above</div>
+        </div>
+
+        <!-- GST -->
+        <div class="conv-section hidden" id="conv-gst">
+          <h3>GST Calculator</h3>
+          <div class="conv-amount-row"><input type="number" id="gst-amount" placeholder="Enter amount (₹)" oninput="calcGST()" /></div>
+          <div class="unit-list">
+            <div class="unit-list-label">GST Rate</div>
+            <label class="unit-item"><input type="radio" name="gst-rate" value="5"  onchange="calcGST()" /><span>5%</span></label>
+            <label class="unit-item"><input type="radio" name="gst-rate" value="12" onchange="calcGST()" /><span>12%</span></label>
+            <label class="unit-item"><input type="radio" name="gst-rate" value="18" checked onchange="calcGST()" /><span>18%</span></label>
+            <label class="unit-item"><input type="radio" name="gst-rate" value="28" onchange="calcGST()" /><span>28%</span></label>
+          </div>
+          <div class="unit-list" style="margin-top:8px">
+            <div class="unit-list-label">Amount Type</div>
+            <label class="unit-item"><input type="radio" name="gst-type" value="excl" checked onchange="calcGST()" /><span>Exclusive (add GST)</span></label>
+            <label class="unit-item"><input type="radio" name="gst-type" value="incl"        onchange="calcGST()" /><span>Inclusive (extract GST)</span></label>
+          </div>
+          <div class="conv-result-box" id="gst-result">Enter amount and select GST rate</div>
+        </div>
+
+      </div><!-- /.converter -->
+    </div><!-- /#mode-converter -->
+
+  </div><!-- /.calculator -->
+</div><!-- /.app-wrapper -->
+
+<script src="script.js"></script>
+</body>
+</html>
