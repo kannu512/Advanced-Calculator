@@ -1,30 +1,38 @@
-Advanced Multi-Mode Calculator
+# Advanced Multi-Mode Calculator
 
-Overview
+## Overview
 
 Advanced Multi-Mode Calculator is a modern web-based calculator developed using HTML, CSS, and JavaScript. The application combines Standard Calculator, Scientific Calculator, and 11+ Unit Conversion modules within a single responsive interface. It provides real-time calculations, calculation history, customizable layouts, theme switching, and interactive visual effects for an enhanced user experience.
 
 ---
 
-Features
+## Live Demo
 
-Calculator Modes
+🔗 Live Website: https://kannu512.github.io/Advanced-Calculator/
+
+🔗 GitHub Repository: https://github.com/kannu512/Advanced-Calculator
+
+---
+
+## Features
+
+### Calculator Modes
 
 * Standard Calculator
 * Scientific Calculator
 * Unit Converter
 
-Scientific Functions
+### Scientific Functions
 
 * Trigonometric Functions (sin, cos, tan)
 * Logarithmic Functions (log, ln)
 * Square Root
 * Square and Cube
-* Inverse (1/x)
+* Inverse Calculations
 * Constants (π, e)
 * Power Operations
 
-Converter Modules
+### Converter Modules
 
 * Currency Converter
 * Length Converter
@@ -38,38 +46,19 @@ Converter Modules
 * Tip Calculator
 * GST Calculator
 
-User Interface
+### User Interface
 
 * Modern Glassmorphism Design
 * Dark Theme
 * Light Theme
-* Multiple Layout Presets:
-
-  * Classic
-  * Ops Left
-  * Compact
-  * Centered
-* Responsive Design
-* Interactive Liquid Button Effects
-* Smooth Animations
-
-History System
-
-* Calculation History Tracking
-* History Panel
-* Clear History Option
-* LocalStorage-Based Persistence
-
-Keyboard Support
-
-* Number Keys
-* Arithmetic Operators
-* Enter Key for Calculation
-* Backspace Support
+* Multiple Layout Presets
+* Responsive Layout
+* Interactive Animations
+* Calculation History
 
 ---
 
-Technologies Used
+## Technologies Used
 
 * HTML5
 * CSS3
@@ -78,98 +67,56 @@ Technologies Used
 
 ---
 
-Project Structure
+## Project Structure
 
-Project Folder/
-│
+Advanced-Calculator/
+
 ├── index.html
+
 ├── style.css
+
 ├── script.js
+
 └── README.md
 
 ---
 
-Installation
+## Installation
 
-1. Clone the Repository
+### Clone Repository
 
-git clone <repository-url>
+```bash
+git clone https://github.com/kannu512/Advanced-Calculator.git
+```
 
-2. Open the Project Folder
+### Run Project
 
-3. Run the Project
-
-Open:
-
-index.html
-
-in any modern web browser.
+Open `index.html` in any modern web browser.
 
 ---
 
-Main Functions
+## Future Enhancements
 
-Function | Purpose
-appendNum() | Handles number input
-appendOp() | Handles operator input
-calculate() | Performs calculations
-sciFunc() | Executes scientific operations
-toggleTheme() | Switches between Light and Dark themes
-switchMode() | Changes calculator modes
-switchPreset() | Changes calculator layouts
-convertCurrency() | Currency conversion
-convertLength() | Length conversion
-convertArea() | Area conversion
-convertMass() | Mass conversion
-convertTemp() | Temperature conversion
-convertVolume() | Volume conversion
-convertData() | Data storage conversion
-
----
-
-Key Highlights
-
-* Standard, Scientific, and Converter modules in one application
-* 11+ conversion utilities
-* Real-time calculations
-* LocalStorage-based history management
-* Multiple UI layouts
-* Responsive design for desktop and mobile devices
-* Modern liquid animation effects
-
----
-
-Future Enhancements
-
-* Real-Time Exchange Rate API
+* Real-Time Currency Exchange API
 * Graph Plotting Calculator
+* Voice-Based Calculations
 * Advanced Engineering Functions
-* Export History Feature
-* Voice-Based Calculator
-* Custom Themes
+* Export Calculation History
 
 ---
 
-Limitations
+## Author
 
-* Currency rates are approximate and static.
-* Internet-based exchange rates are not integrated.
-* Requires a modern web browser.
-
----
-
-Author
-
-Pawan Khulbey
+**Pawan Khulbey**
 
 B.Tech Computer Science & Engineering
 
 Haridwar University, Roorkee
 
-Skills: HTML, CSS, JavaScript, Python, SQL, Power BI, AI & Machine Learning
+GitHub: https://github.com/kannu512
 
 ---
 
-License
+## License
 
 This project is developed for educational and learning purposes.
